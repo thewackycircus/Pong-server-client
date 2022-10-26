@@ -77,6 +77,7 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
     private BatComponent player2Bat;
 
     private Server<String> server;
+    private boolean isGameRunning = false;
 
     @Override
     protected void initInput() {
@@ -127,6 +128,13 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
                 player2Bat.stop();
             }
         }, KeyCode.K);
+
+        getInput().addAction(new UserAction("start") {
+            @Override
+            protected void onAction() {
+                isGameRunning = true;
+            }
+        }, KeyCode.SPACE);
     }
 
     @Override
@@ -189,7 +197,7 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
         CollisionHandler ballBatHandler = new CollisionHandler(EntityType.BALL, EntityType.PLAYER_BAT) {
             @Override
             protected void onCollisionBegin(Entity a, Entity bat) {
-                playHitAnimation(bat);
+//                playHitAnimation(bat);
 
                 server.broadcast(bat == player1 ? BALL_HIT_BAT1 : BALL_HIT_BAT2);
             }
@@ -216,6 +224,7 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
 
             var message = "";
 
+<<<<<<< Updated upstream
 //            if (!isInitDataSent) {
 //                // if first message, send players' X position;
 //                message = "INIT_DATA," + player1.getX() + "," + player2.getX() + player1.getY() + "," + player2.getY() + "," + ball.getX() + "," + ball.getY();
@@ -227,6 +236,9 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
             message = "GAME_DATA," + player1.getX() + "," + player2.getX() + "," + player1.getY() + "," + player2.getY() + "," + ball.getX() + "," + ball.getY();
 
             System.out.println(message);
+=======
+            message = "GAME_DATA," + player1.getY() + "," + player2.getY() + "," + ball.getX() + "," + ball.getY();
+>>>>>>> Stashed changes
 
             server.broadcast(message);
         }
@@ -250,27 +262,49 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
         player2Bat = player2.getComponent(BatComponent.class);
     }
 
-    private void playHitAnimation(Entity bat) {
-        animationBuilder()
-                .autoReverse(true)
-                .duration(Duration.seconds(0.5))
-                .interpolator(Interpolators.BOUNCE.EASE_OUT())
-                .rotate(bat)
-                .from(FXGLMath.random(-25, 25))
-                .to(0)
-                .buildAndPlay();
-    }
+//    private void playHitAnimation(Entity bat) {
+//        animationBuilder()
+//                .autoReverse(true)
+//                .duration(Duration.seconds(0.5))
+//                .interpolator(Interpolators.BOUNCE.EASE_OUT())
+//                .rotate(bat)
+//                .from(FXGLMath.random(-25, 25))
+//                .to(0)
+//                .buildAndPlay();
+//    }
 
     @Override
     public void onReceive(Connection<String> connection, String message) {
         var tokens = message.split(",");
 
         Arrays.stream(tokens).skip(1).forEach(key -> {
-            if (key.endsWith("_DOWN")) {
-                getInput().mockKeyPress(KeyCode.valueOf(key.substring(0, 1)));
-            } else if (key.endsWith("_UP")) {
-                getInput().mockKeyRelease(KeyCode.valueOf(key.substring(0, 1)));
+
+            if (key.endsWith("INIT")) {
+                // upon initial client connection, send init data;
+                var returnMessage = "";
+
+                returnMessage = "INIT_DATA," + player1.getX() + "," + player2.getX();
+
+                server.broadcast(returnMessage);
+            } else {
+                // key presses
+                var keySplit = key.split("_");
+
+                if (keySplit[1].endsWith("DOWN")) {
+                    getInput().mockKeyPress(KeyCode.valueOf(keySplit[0]));
+                } else if (keySplit[1].endsWith("UP")) {
+                    getInput().mockKeyRelease(KeyCode.valueOf(keySplit[0]));
+                }
             }
+
+//          OLD KEY LISTENERS
+
+//          if (key.endsWith("_DOWN")) {
+//              getInput().mockKeyPress(KeyCode.valueOf(key.substring(0, 1)));
+//          } else if (key.endsWith("_UP")) {
+//              getInput().mockKeyRelease(KeyCode.valueOf(key.substring(0, 1)));
+//          }
+
         });
     }
 

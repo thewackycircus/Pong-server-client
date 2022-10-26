@@ -1,17 +1,27 @@
 #include "MyGame.h"
 
 void MyGame::on_receive(std::string cmd, std::vector<std::string>& args) {
+<<<<<<< Updated upstream
     /*if (cmd == "INIT_DATA") {
         std::cout << "ARGS SIZE" << args.size() << std::endl;
         if (args.size() == 6) {
             std::cout << "set init data" << std::endl;
+=======
+    if (cmd == "GAME_DATA") {
+        if (args.size() == 4) {
+            game_data.player1Y = stoi(args.at(0));
+            game_data.player2Y = stoi(args.at(1));
+            game_data.ballX = stoi(args.at(2));
+            game_data.ballY = stoi(args.at(3));
+        }
+    }
+    else if (cmd == "INIT_DATA") {
+        if (args.size() == 2) {
+>>>>>>> Stashed changes
             game_data.player1X = stoi(args.at(0));
             game_data.player2X = stoi(args.at(1));
-            game_data.player1Y = stoi(args.at(2));
-            game_data.player2Y = stoi(args.at(3));
-            game_data.ballX = stoi(args.at(4));
-            game_data.ballY = stoi(args.at(5));
         }
+<<<<<<< Updated upstream
     } else */if (cmd == "GAME_DATA") {
         //std::cout << "ARGS SIZE" << args.size() << std::endl;
         // 
@@ -23,16 +33,25 @@ void MyGame::on_receive(std::string cmd, std::vector<std::string>& args) {
             game_data.player2Y = stoi(args.at(3));
             game_data.ballX = stoi(args.at(4));
             game_data.ballY = stoi(args.at(5));
+=======
+    }
+    else if (cmd == "SCORES") {
+        if (args.size() == 2) {
+            score_data.player1Score = stoi(args.at(0));
+            score_data.player2Score = stoi(args.at(1));
+>>>>>>> Stashed changes
         }
     } else {
         std::cout << "CMD RECEIVED: " << cmd << std::endl;
     }
-
-    
 }
 
 void MyGame::send(std::string message) {
     messages.push_back(message);
+}
+
+void MyGame::init() {
+    send("INIT");
 }
 
 void MyGame::input(SDL_Event& event) {
@@ -42,6 +61,9 @@ void MyGame::input(SDL_Event& event) {
             break;
         case SDLK_s:
             send(event.type == SDL_KEYDOWN ? "S_DOWN" : "S_UP");
+            break;
+        case SDLK_SPACE:
+            send(event.type == SDL_KEYDOWN ? "SPACE_DOWN" : "SPACE_UP");
             break;
     }
 }
@@ -56,8 +78,20 @@ void MyGame::update() {
 }
 
 void MyGame::render(SDL_Renderer* renderer) {
+    SDL_Color White = { 255, 255, 255 };
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderDrawRect(renderer, &player1);
     SDL_RenderDrawRect(renderer, &player2);
     SDL_RenderDrawRect(renderer, &ball);
+
+    // render text
+    TTF_Font* font = TTF_OpenFont("../fonts/OpenSans.ttf", 24);
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, "Hello World!", White);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+    SDL_Rect messageRect;
+    messageRect.x = 0;
+    messageRect.y = 0;
+    messageRect.w = 100;
+    messageRect.h = 100;
+    SDL_RenderCopy(renderer, message, NULL, &messageRect);
 }

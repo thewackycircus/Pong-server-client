@@ -28,6 +28,7 @@ class MyGame {
 
         void on_receive(std::string message, std::vector<std::string>& args);
         void send(std::string message);
+        void init();
         void input(SDL_Event& event);
         void update();
         void render(SDL_Renderer* renderer);

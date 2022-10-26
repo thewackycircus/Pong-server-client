@@ -141,6 +141,7 @@ int run_game() {
         return -1;
     }
 
+    game->init();
     loop(renderer);
 
     return 0;
@@ -154,6 +155,15 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
+<<<<<<< Updated upstream
+=======
+    // Initialize SDL_ttf
+    if (TTF_Init() == -1) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(2);
+    }
+
+>>>>>>> Stashed changes
     // Initialize SDL_net
     if (SDLNet_Init() == -1) {
         printf("SDLNet_Init: %s\n", SDLNet_GetError());
