@@ -79,7 +79,7 @@ public class PongFactory implements EntityFactory {
 
         return entityBuilder(data)
                 .type(EntityType.BALL)
-                .bbox(new HitBox(BoundingShape.circle(5)))
+                .bbox(new HitBox(BoundingShape.circle(10)))
                 .with(physics)
                 .with(new CollidableComponent(true))
                 .with(new ParticleComponent(emitter))
@@ -96,7 +96,7 @@ public class PongFactory implements EntityFactory {
 
         return entityBuilder(data)
                 .type(isPlayer ? EntityType.PLAYER_BAT : EntityType.ENEMY_BAT)
-                .viewWithBBox(new Rectangle(20, 60, Color.LIGHTGRAY))
+                .viewWithBBox(new Rectangle(20, 80, Color.LIGHTGRAY))
                 .with(new CollidableComponent(true))
                 .with(physics)
                 .with(new BatComponent())

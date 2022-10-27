@@ -143,7 +143,13 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
         server = getNetService().newTCPServer(55555, new ServerConfig<>(String.class));
 
         server.setOnConnected(connection -> {
+            // This code is run when client first connects
             connection.addMessageHandlerFX(this);
+
+            var message = "";
+            message = "INIT_DATA," + player1.getX() + "," + player2.getX();
+            System.out.println(message);
+            server.broadcast(message);
         });
 
         getGameWorld().addEntityFactory(new PongFactory());
@@ -216,9 +222,9 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
 
             var message = "";
 
-            message = "GAME_DATA," + player1.getX() + "," + player2.getX() + "," + player1.getY() + "," + player2.getY() + "," + ball.getX() + "," + ball.getY();
+            message = "GAME_DATA," + player1.getY() + "," + player2.getY() + "," + ball.getX() + "," + ball.getY();
 
-            System.out.println(message);
+//            System.out.println(message);
 
             server.broadcast(message);
         }
@@ -243,14 +249,14 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
     }
 
     private void playHitAnimation(Entity bat) {
-        animationBuilder()
-                .autoReverse(true)
-                .duration(Duration.seconds(0.5))
-                .interpolator(Interpolators.BOUNCE.EASE_OUT())
-                .rotate(bat)
-                .from(FXGLMath.random(-25, 25))
-                .to(0)
-                .buildAndPlay();
+//        animationBuilder()
+//                .autoReverse(true)
+//                .duration(Duration.seconds(0.5))
+//                .interpolator(Interpolators.BOUNCE.EASE_OUT())
+//                .rotate(bat)
+//                .from(FXGLMath.random(-25, 25))
+//                .to(0)
+//                .buildAndPlay();
     }
 
     @Override
@@ -258,11 +264,22 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
         var tokens = message.split(",");
 
         Arrays.stream(tokens).skip(1).forEach(key -> {
-            if (key.endsWith("_DOWN")) {
-                getInput().mockKeyPress(KeyCode.valueOf(key.substring(0, 1)));
-            } else if (key.endsWith("_UP")) {
-                getInput().mockKeyRelease(KeyCode.valueOf(key.substring(0, 1)));
+
+            // NEW KEY PRESS LISTENERS
+            var keySplit = key.split("_");
+
+            if (keySplit[1].endsWith("DOWN")) {
+                getInput().mockKeyPress(KeyCode.valueOf(keySplit[0]));
+            } else if (keySplit[1].endsWith("UP")) {
+                getInput().mockKeyRelease(KeyCode.valueOf(keySplit[0]));
             }
+
+            // OLD KEY PRESS LISTENERS
+//            if (key.endsWith("_DOWN")) {
+//                getInput().mockKeyPress(KeyCode.valueOf(key.substring(0, 1)));
+//            } else if (key.endsWith("_UP")) {
+//                getInput().mockKeyRelease(KeyCode.valueOf(key.substring(0, 1)));
+//            }
         });
     }
 

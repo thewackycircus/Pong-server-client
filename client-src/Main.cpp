@@ -137,6 +137,7 @@ int run_game() {
         return -1;
     }
 
+    game->init();
     loop(renderer);
 
     return 0;
@@ -156,12 +157,17 @@ int main(int argc, char** argv) {
         exit(2);
     }
 
+    if (TTF_Init() == -1) {
+        printf("TTF_INIT: %s\n", TTF_GetError());
+        exit(3);
+    }
+
     IPaddress ip;
 
     // Resolve host (ip name + port) into an IPaddress type
     if (SDLNet_ResolveHost(&ip, IP_NAME, PORT) == -1) {
         printf("SDLNet_ResolveHost: %s\n", SDLNet_GetError());
-        exit(3);
+        exit(5);
     }
 
     // Open the connection to the server
