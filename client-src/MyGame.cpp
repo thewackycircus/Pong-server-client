@@ -59,26 +59,63 @@ void MyGame::update() {
 }
 
 void MyGame::render(SDL_Renderer* renderer) {
-    SDL_Color white = { 255, 255, 255 };
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderDrawRect(renderer, &player1);
     SDL_RenderDrawRect(renderer, &player2);
     SDL_RenderDrawRect(renderer, &ball);
 
-    std::string text = "Player 1: ";
-    text += std::to_string(game_data.player1Score);
+    
 
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, text.c_str(), white);
-    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+    renderText(renderer, std::to_string(game_data.player1Score), 0, 0);
+    renderText(renderer, std::to_string(game_data.player2Score), 800, 0);
+}
 
-    int texW = 0;
-    int texH = 0;
-    SDL_QueryTexture(message, NULL, NULL, &texW, &texH);
-    SDL_Rect messageRect = { 0, 0, texW, texH };
+//void MyGame::renderText(SDL_Renderer* renderer, int playerScore, int xPos, int yPos, int width, int height) {
+//
+//    std::string text = std::to_string(playerScore);
+//    SDL_Color white = { 255, 255, 255 };
+//
+//    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, text.c_str(), white);
+//    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+//
+//    int texW = width;
+//    int texH = height;
+//    SDL_QueryTexture(message, NULL, NULL, &texW, &texH);
+//    SDL_Rect messageRect = { xPos, yPos, texW, texH };
+//
+//    SDL_RenderCopy(renderer, message, NULL, &messageRect);
+//
+//    SDL_FreeSurface(surfaceMessage);
+//    SDL_DestroyTexture(message);
+//}
 
-    SDL_RenderCopy(renderer, message, NULL, &messageRect);
+//void MyGame::renderText(SDL_Renderer* renderer, std::string text, int xPos, int yPos) {
+//
+//}
 
-    SDL_FreeSurface(surfaceMessage);
-    SDL_DestroyTexture(message);
+void MyGame::renderText(SDL_Renderer* renderer, int xPos, int yPos, std::string text, SDL_Color color) {
+
+    vector2 position = positionText(renderer, text, color);
+    
+    SDL_Rect textureRect = { xPos, yPos, position.x, position.y};
+    SDL_RenderCopy(renderer, createTextureFromString(renderer, text, color), NULL, &textureRect);
+}
+
+vector2 MyGame::positionText(SDL_Renderer* renderer, std::string text, SDL_Color color) {
+    vector2 size;
+
+    SDL_QueryTexture(createTextureFromString(renderer, text, color), NULL, NULL, &size.x, &size.y);
+
+    return size;
+}
+
+SDL_Texture* MyGame::createTextureFromString(SDL_Renderer* renderer, std::string text, SDL_Color color) {
+
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    SDL_FreeSurface(surface);
+
+    return texture;
 }
