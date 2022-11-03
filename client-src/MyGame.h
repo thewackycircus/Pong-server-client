@@ -7,6 +7,7 @@
 
 #include "SDL.h"
 #include "SDL_ttf.h"
+#include "Text.h"
 
 static struct GameData {
     int player1X = 0;
@@ -19,11 +20,6 @@ static struct GameData {
     int player2Score = 0;
 } game_data;
 
-struct vector2 {
-    int x = 0;
-    int y = 0;
-};
-
 class MyGame {
 
     private:
@@ -31,20 +27,14 @@ class MyGame {
         SDL_Rect player2 = { 580, 0, 20, 80 };
         SDL_Rect ball = { 0, 0, 20, 20 };
 
-        TTF_Font* font;
-
     public:
         std::vector<std::string> messages;
 
         void on_receive(std::string message, std::vector<std::string>& args);
         void send(std::string message);
-        void init();
         void input(SDL_Event& event);
         void update();
         void render(SDL_Renderer* renderer);        
-        SDL_Texture* createTextureFromString(SDL_Renderer* renderer, std::string text, SDL_Color color);
-        vector2 positionText(SDL_Renderer* renderer, std::string text, SDL_Color color);
-        void renderText(SDL_Renderer* renderer, int xPos, int yPos, std::string text, SDL_Color color);
 };
 
 #endif
