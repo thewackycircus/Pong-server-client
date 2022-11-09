@@ -162,6 +162,11 @@ int main(int argc, char** argv) {
         exit(3);
     }
 
+    if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
+        printf("IMG_Init: %s\n", IMG_GetError());
+        exit(4);
+    }
+
     IPaddress ip;
 
     // Resolve host (ip name + port) into an IPaddress type

@@ -28,6 +28,27 @@ void MyGame::send(std::string message) {
     messages.push_back(message);
 }
 
+void MyGame::init(SDL_Renderer* renderer) {
+    SDL_Surface* redPaddleSurface = IMG_Load("redPaddle.png");
+    SDL_Surface* bluePaddleSurface = IMG_Load("bluePaddle.png");
+    SDL_Surface* puckSurface = IMG_Load("puck.png");
+
+    SDL_Surface* surfaces[] = { redPaddleSurface, bluePaddleSurface, puckSurface };
+
+    MyGame::checkSurfaces(surfaces);
+
+}
+
+bool MyGame::checkSurfaces(SDL_Surface* surfaces[]) {
+    bool status = true;
+
+    for (SDL_Surface i : surfaces) {
+
+    }
+
+    return status;
+}
+
 void MyGame::input(SDL_Event& event) {
     switch (event.key.keysym.sym) {
         case SDLK_w:
@@ -59,6 +80,9 @@ void MyGame::render(SDL_Renderer* renderer) {
 
     SDL_Color white = { 255, 255, 255 };
 
-    Text::renderText(renderer,50, 50, std::to_string(game_data.player1Score), white);
-    Text::renderText(renderer, 750, 50, std::to_string(game_data.player2Score), white);
+    Text player1ScoreText = Text();
+    Text player2ScoreText = Text();
+
+    player1ScoreText.renderText(renderer,50, 50, std::to_string(game_data.player1Score), white);
+    player2ScoreText.renderText(renderer, 750, 50, std::to_string(game_data.player2Score), white);
 }

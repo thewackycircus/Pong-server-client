@@ -8,6 +8,7 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "Text.h"
+#include "SDL_image.h"
 
 static struct GameData {
     int player1X = 0;
@@ -32,6 +33,8 @@ class MyGame {
 
         void on_receive(std::string message, std::vector<std::string>& args);
         void send(std::string message);
+        void init(SDL_Renderer* renderer);
+        bool checkSurfaces(SDL_Surface* surfaces[]);
         void input(SDL_Event& event);
         void update();
         void render(SDL_Renderer* renderer);        

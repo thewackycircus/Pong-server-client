@@ -1,9 +1,10 @@
 #include "Text.h"
 
-void Text::init() {
-    font = TTF_OpenFont("fonts/OpenSans.ttf", 32);
+Text::Text() {
+    font = TTF_OpenFont("assets/fonts/OpenSans.ttf", 48);
     if (!font) {
         printf("TTF_INIT: %s\n", TTF_GetError());
+
         exit(0);
     }
 }
@@ -18,23 +19,24 @@ void Text::renderText(SDL_Renderer* renderer, int xPos, int yPos, std::string te
     SDL_QueryTexture(texture, NULL, NULL, &textW, &textH);
 
     // position text
-    vector2 initPosition;
-    initPosition.x = xPos;
-    initPosition.y = yPos;
-    vector2 position = positionText(initPosition, textW, textH);
+    Vector2 initPosition = Vector2(xPos, yPos);
+    Vector2 position = positionText(initPosition, textW, textH);
 
     // render text
-    SDL_Rect textureRect = { position.x, position.y, textW, textH };
+    SDL_Rect textureRect = { position.getX(), position.getY(), textW, textH};
     SDL_RenderCopy(renderer, texture, NULL, &textureRect);
 
     SDL_DestroyTexture(texture);
 }
 
-vector2 Text::positionText(vector2 initPosition, int textW, int textH) {
-    vector2 position = initPosition;
+Vector2 Text::positionText(Vector2 initPosition, int textW, int textH) {
+    Vector2 position = initPosition;
 
-    position.x -= textW / 2;
-    position.y -= textH / 2;
+    int newXPos = position.getX() - textW / 2;
+    int newYPos = position.getY() - textH / 2;
+
+    position.setX(newXPos);
+    position.setY(newYPos);
 
     return position;
 }

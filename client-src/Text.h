@@ -13,9 +13,10 @@ class Text
         TTF_Font* font;
 
     public:
-        void init();
+        Text();
+
         SDL_Texture* createTextureFromString(SDL_Renderer* renderer, std::string text, SDL_Color color);
-        vector2 positionText(vector2 initPosition, int textW, int textH);
+        Vector2 positionText(Vector2 initPosition, int textW, int textH);
         void renderText(SDL_Renderer* renderer, int xPos, int yPos, std::string text, SDL_Color color);
 };
 
