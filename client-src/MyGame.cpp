@@ -1,6 +1,7 @@
 #include "MyGame.h"
 
 void MyGame::on_receive(std::string cmd, std::vector<std::string>& args) {
+    std::cout << "DATA RECEIVED: " << cmd << ", Args: " << args.size() << std::endl;
     if (cmd == "INIT_DATA") {
         if (args.size() == 2) {
             std::cout << "INIT_DATA," << stoi(args.at(0)) << "," << stoi(args.at(1)) << std::endl;
@@ -29,24 +30,26 @@ void MyGame::send(std::string message) {
 }
 
 void MyGame::init(SDL_Renderer* renderer) {
-    SDL_Surface* redPaddleSurface = IMG_Load("redPaddle.png");
-    SDL_Surface* bluePaddleSurface = IMG_Load("bluePaddle.png");
-    SDL_Surface* puckSurface = IMG_Load("puck.png");
 
-    SDL_Surface* surfaces[] = { redPaddleSurface, bluePaddleSurface, puckSurface };
-
-    MyGame::checkSurfaces(surfaces);
-
+    player1Texture = MyGame::createTextureFromImg(renderer, "assets/images/redPaddle.png");
+    player2Texture = MyGame::createTextureFromImg(renderer, "assets/images/bluePaddle.png");
+    ballTexture = MyGame::createTextureFromImg(renderer, "assets/images/ball.png");
 }
 
-bool MyGame::checkSurfaces(SDL_Surface* surfaces[]) {
-    bool status = true;
+SDL_Texture* MyGame::createTextureFromImg(SDL_Renderer* renderer, std::string img) {
+    SDL_Surface* surface = IMG_Load(img.c_str());
 
-    for (SDL_Surface i : surfaces) {
-
+    if (surface != nullptr) {
+        std::cout << img << " Loaded" << std::endl;
+    }
+    else {
+        std::cout << img << " Not Loaded" << std::endl;
     }
 
-    return status;
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    return texture;
 }
 
 void MyGame::input(SDL_Event& event) {
@@ -73,10 +76,16 @@ void MyGame::update() {
 
 void MyGame::render(SDL_Renderer* renderer) {
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    // collision detection debugging
+
+    /*SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderDrawRect(renderer, &player1);
     SDL_RenderDrawRect(renderer, &player2);
-    SDL_RenderDrawRect(renderer, &ball);
+    SDL_RenderDrawRect(renderer, &ball);*/
+
+    SDL_RenderCopy(renderer, player1Texture, NULL, &player1);
+    SDL_RenderCopy(renderer, player2Texture, NULL, &player2);
+    SDL_RenderCopy(renderer, ballTexture, NULL, &ball);
 
     SDL_Color white = { 255, 255, 255 };
 

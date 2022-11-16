@@ -28,13 +28,17 @@ class MyGame {
         SDL_Rect player2 = { 580, 0, 20, 80 };
         SDL_Rect ball = { 0, 0, 20, 20 };
 
+        SDL_Texture* player1Texture;
+        SDL_Texture* player2Texture;
+        SDL_Texture* ballTexture;
+
     public:
         std::vector<std::string> messages;
 
         void on_receive(std::string message, std::vector<std::string>& args);
         void send(std::string message);
         void init(SDL_Renderer* renderer);
-        bool checkSurfaces(SDL_Surface* surfaces[]);
+        SDL_Texture* createTextureFromImg(SDL_Renderer* renderer, std::string img);
         void input(SDL_Event& event);
         void update();
         void render(SDL_Renderer* renderer);        

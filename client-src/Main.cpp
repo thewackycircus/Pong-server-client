@@ -137,7 +137,7 @@ int run_game() {
         return -1;
     }
 
-    game->init();
+    game->init(renderer);
     loop(renderer);
 
     return 0;
