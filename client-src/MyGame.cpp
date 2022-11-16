@@ -95,3 +95,33 @@ void MyGame::render(SDL_Renderer* renderer) {
     player1ScoreText.renderText(renderer,50, 50, std::to_string(game_data.player1Score), white);
     player2ScoreText.renderText(renderer, 750, 50, std::to_string(game_data.player2Score), white);
 }
+
+// ----------------------- audio testing ------------------------------------------------
+
+void MyGame::init_audio() {
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+        printf("Mix_OpenAudio: %s\n", Mix_GetError());
+        return;
+    }
+
+    sound = Mix_LoadWAV("assets/sounds/ballToPaddle.wav")
+    if (sound == nullptr) {
+        printf("Mix_LoadWAV: %s\n", Mix_GetError());
+    }
+    else {
+        std::cout << "Sound effect loaded" << std::endl;
+    }
+}
+
+void MyGame::play_sound() {
+    if (Mix_PlayChannel(-1, sound, 0) == -1) {
+        printf("Error playing sound. Mix_PlayChannel: %s\n", Mix_GetError());
+    }
+}
+
+void MyGame::destroy() {
+    Mix_FreeChunk(sound);
+    sound = nullptr;
+
+    Mix_CloseAudio();
+}

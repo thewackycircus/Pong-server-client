@@ -9,6 +9,7 @@
 #include "SDL_ttf.h"
 #include "Text.h"
 #include "SDL_image.h"
+#include "SDL_mixer.h"
 
 static struct GameData {
     int player1X = 0;
@@ -32,6 +33,8 @@ class MyGame {
         SDL_Texture* player2Texture;
         SDL_Texture* ballTexture;
 
+        Mix_Chunk* sound;
+
     public:
         std::vector<std::string> messages;
 
@@ -41,7 +44,11 @@ class MyGame {
         SDL_Texture* createTextureFromImg(SDL_Renderer* renderer, std::string img);
         void input(SDL_Event& event);
         void update();
-        void render(SDL_Renderer* renderer);        
+        void render(SDL_Renderer* renderer);  
+
+        void init_audio();
+        void play_sound();
+        void destroy();
 };
 
 #endif

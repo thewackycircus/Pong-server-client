@@ -146,10 +146,14 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
             // This code is run when client first connects
             connection.addMessageHandlerFX(this);
 
-            var message = "";
-            message = "INIT_DATA," + player1.getX() + "," + player2.getX();
-            System.out.println(message);
-            server.broadcast(message);
+            var message = "INIT_DATA," + player1.getX() + "," + player2.getX();
+
+            runOnce(() -> {
+                System.out.println(message);
+                server.broadcast(message);
+            }, Duration.seconds(.5));
+
+
         });
 
         getGameWorld().addEntityFactory(new PongFactory());
