@@ -7,9 +7,12 @@
 
 #include "SDL.h"
 #include "SDL_ttf.h"
-#include "Text.h"
 #include "SDL_image.h"
 #include "SDL_mixer.h"
+
+#include "Text.h"
+#include "Entity.h"
+#include "AssetManager.h"
 
 static struct GameData {
     int player1X = 0;
@@ -25,15 +28,21 @@ static struct GameData {
 class MyGame {
 
     private:
-        SDL_Rect player1 = { 0, 0, 20, 80 };
+        /*SDL_Rect player1 = { 0, 0, 20, 80 };
         SDL_Rect player2 = { 580, 0, 20, 80 };
-        SDL_Rect ball = { 0, 0, 20, 20 };
+        SDL_Rect ball = { 0, 0, 20, 20 };*/
 
         SDL_Texture* player1Texture;
         SDL_Texture* player2Texture;
         SDL_Texture* ballTexture;
 
+        Entity player1 = Entity(0, 0, 20, 80);
+        Entity player2 = Entity(580, 0, 20, 80);
+        Entity ball = Entity(0, 0, 20, 20);
+
         Mix_Chunk* sound;
+
+        AssetManager assetManager = AssetManager();
 
     public:
         std::vector<std::string> messages;

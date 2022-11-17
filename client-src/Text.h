@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -6,7 +8,7 @@
 #include "SDL_ttf.h"
 #include "Vector2.h"
 
-#pragma once
+
 class Text
 {
     private:

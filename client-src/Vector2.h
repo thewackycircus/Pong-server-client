@@ -1,3 +1,5 @@
+#pragma once
+
 // this class represents the position of a 2D object
 class Vector2 {
 	private:

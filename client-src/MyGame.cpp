@@ -34,6 +34,10 @@ void MyGame::init(SDL_Renderer* renderer) {
     player1Texture = MyGame::createTextureFromImg(renderer, "assets/images/redPaddle.png");
     player2Texture = MyGame::createTextureFromImg(renderer, "assets/images/bluePaddle.png");
     ballTexture = MyGame::createTextureFromImg(renderer, "assets/images/ball.png");
+
+    assetManager.addTexture("player1Texture", player1Texture);
+    assetManager.addTexture("player2Texture", player2Texture);
+    assetManager.addTexture("ballTexture", ballTexture);
 }
 
 SDL_Texture* MyGame::createTextureFromImg(SDL_Renderer* renderer, std::string img) {
@@ -66,26 +70,19 @@ void MyGame::input(SDL_Event& event) {
 }
 
 void MyGame::update() {
-    player1.x = game_data.player1X;
+    /*player1.x = game_data.player1X;
     player1.y = game_data.player1Y;
     player2.x = game_data.player2X;
     player2.y = game_data.player2Y;
     ball.x = game_data.ballX;
-    ball.y = game_data.ballY;
+    ball.y = game_data.ballY;*/
+
+    player1.setPosition(game_data.player1X, game_data.player1Y);
+    player2.setPosition(game_data.player2X, game_data.player2Y);
+    ball.setPosition(game_data.ballX, game_data.ballY);
 }
 
 void MyGame::render(SDL_Renderer* renderer) {
-
-    // collision detection debugging
-
-    /*SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderDrawRect(renderer, &player1);
-    SDL_RenderDrawRect(renderer, &player2);
-    SDL_RenderDrawRect(renderer, &ball);*/
-
-    SDL_RenderCopy(renderer, player1Texture, NULL, &player1);
-    SDL_RenderCopy(renderer, player2Texture, NULL, &player2);
-    SDL_RenderCopy(renderer, ballTexture, NULL, &ball);
 
     SDL_Color white = { 255, 255, 255 };
 
@@ -94,6 +91,18 @@ void MyGame::render(SDL_Renderer* renderer) {
 
     player1ScoreText.renderText(renderer,50, 50, std::to_string(game_data.player1Score), white);
     player2ScoreText.renderText(renderer, 750, 50, std::to_string(game_data.player2Score), white);
+
+    player1.renderEntity(renderer, assetManager.getTexture("player1Texture"));
+    player2.renderEntity(renderer, assetManager.getTexture("player2Texture"));
+    ball.renderEntity(renderer, assetManager.getTexture("ballTexture"));
+
+    /*SDL_RenderCopy(renderer, player1Texture, NULL, &player1);
+    SDL_RenderCopy(renderer, player2Texture, NULL, &player2);
+    SDL_RenderCopy(renderer, ballTexture, NULL, &ball);
+
+    SDL_DestroyTexture(player1Texture);
+    SDL_DestroyTexture(player2Texture);
+    SDL_DestroyTexture(ballTexture);*/
 }
 
 // ----------------------- audio testing ------------------------------------------------
@@ -104,7 +113,7 @@ void MyGame::init_audio() {
         return;
     }
 
-    sound = Mix_LoadWAV("assets/sounds/ballToPaddle.wav")
+    sound = Mix_LoadWAV("assets/sounds/ballToPaddle.wav");
     if (sound == nullptr) {
         printf("Mix_LoadWAV: %s\n", Mix_GetError());
     }
