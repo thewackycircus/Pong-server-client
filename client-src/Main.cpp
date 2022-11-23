@@ -190,6 +190,8 @@ int main(int argc, char** argv) {
 
     delete game;
 
+    AssetManager::cleanUp();
+
     // Close connection to the server
     SDLNet_TCP_Close(socket);
 

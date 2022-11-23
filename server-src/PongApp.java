@@ -191,7 +191,6 @@ public class PongApp extends GameApplication implements MessageHandler<String> {
                 } else if (boxB.getName().equals("BOT")) {
                     server.broadcast(HIT_WALL_DOWN);
                 }
-
                 getGameScene().getViewport().shakeTranslational(5);
             }
         });

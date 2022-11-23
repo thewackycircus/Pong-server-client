@@ -7,8 +7,8 @@
 
 #include "SDL.h"
 #include "SDL_ttf.h"
-#include "SDL_image.h"
 #include "SDL_mixer.h"
+#include "SDL_image.h"
 
 #include "Text.h"
 #include "Entity.h"
@@ -40,10 +40,6 @@ class MyGame {
         Entity player2 = Entity(580, 0, 20, 80);
         Entity ball = Entity(0, 0, 20, 20);
 
-        Mix_Chunk* sound;
-
-        AssetManager assetManager = AssetManager();
-
     public:
         std::vector<std::string> messages;
 
@@ -51,6 +47,7 @@ class MyGame {
         void send(std::string message);
         void init(SDL_Renderer* renderer);
         SDL_Texture* createTextureFromImg(SDL_Renderer* renderer, std::string img);
+        Mix_Chunk* loadSound(std::string soundFile);
         void input(SDL_Event& event);
         void update();
         void render(SDL_Renderer* renderer);  
