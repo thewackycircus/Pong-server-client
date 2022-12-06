@@ -36,6 +36,8 @@ class MyGame {
         SDL_Texture* player2Texture;
         SDL_Texture* ballTexture;
 
+        TTF_Font* font;
+
         Entity player1 = Entity(0, 0, 20, 80);
         Entity player2 = Entity(580, 0, 20, 80);
         Entity ball = Entity(0, 0, 20, 20);

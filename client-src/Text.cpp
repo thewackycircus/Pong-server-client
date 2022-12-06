@@ -1,17 +1,8 @@
 #include "Text.h"
 
-Text::Text() {
-    font = TTF_OpenFont("assets/fonts/OpenSans.ttf", 48);
-    if (!font) {
-        printf("TTF_INIT: %s\n", TTF_GetError());
+void Text::renderText(SDL_Renderer* renderer, int xPos, int yPos, std::string text, SDL_Color color, TTF_Font* font) {
 
-        exit(0);
-    }
-}
-
-void Text::renderText(SDL_Renderer* renderer, int xPos, int yPos, std::string text, SDL_Color color) {
-
-    SDL_Texture* texture = createTextureFromString(renderer, text, color);
+    SDL_Texture* texture = createTextureFromString(renderer, text, color, font);
 
     // get size of text texture
     int textW;
@@ -41,7 +32,7 @@ Vector2 Text::positionText(Vector2 initPosition, int textW, int textH) {
     return position;
 }
 
-SDL_Texture* Text::createTextureFromString(SDL_Renderer* renderer, std::string text, SDL_Color color) {
+SDL_Texture* Text::createTextureFromString(SDL_Renderer* renderer, std::string text, SDL_Color color, TTF_Font* font) {
 
     SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);

@@ -54,6 +54,11 @@ void MyGame::init(SDL_Renderer* renderer) {
     AssetManager::addTexture("player1Texture", player1Texture);
     AssetManager::addTexture("player2Texture", player2Texture);
     AssetManager::addTexture("ballTexture", ballTexture);
+
+    // opening fonts and adding them to asset manager
+    font = TTF_OpenFont("assets/fonts/OpenSans.ttf", 48);
+
+    AssetManager::addFont("font", font);
 }
 
 SDL_Texture* MyGame::createTextureFromImg(SDL_Renderer* renderer, std::string img) {
@@ -98,8 +103,8 @@ void MyGame::render(SDL_Renderer* renderer) {
     Text player1ScoreText = Text();
     Text player2ScoreText = Text();
 
-    player1ScoreText.renderText(renderer,50, 50, std::to_string(game_data.player1Score), white);
-    player2ScoreText.renderText(renderer, 750, 50, std::to_string(game_data.player2Score), white);
+    player1ScoreText.renderText(renderer,50, 50, std::to_string(game_data.player1Score), white, AssetManager::getFont("font"));
+    player2ScoreText.renderText(renderer, 750, 50, std::to_string(game_data.player2Score), white, AssetManager::getFont("font"));
 
     player1.renderEntity(renderer, AssetManager::getTexture("player1Texture"));
     player2.renderEntity(renderer, AssetManager::getTexture("player2Texture"));
